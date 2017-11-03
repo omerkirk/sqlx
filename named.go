@@ -298,6 +298,18 @@ func compileNamedQuery(qs []byte, bindType int) (query string, names []string, e
 		}
 	}
 
+	if bindType == NAMED {
+		namesWODups := make([]string, 0)
+		nameMap := make(map[string]bool)
+		for _, name := range names {
+			if _, ok := nameMap[name]; !ok {
+				nameMap[name] = true
+				namesWODups = append(namesWODups, name)
+			}
+		}
+		return string(rebound), namesWODups, err
+	}
+
 	return string(rebound), names, err
 }
 
